@@ -20,7 +20,8 @@ path="${fullfile%/*}"
 docker -v >/dev/null 2>&1 || die "Docker is not installed"
 
 # Run a docker container to mkvmerge the subtitles in
-docker run --name "mkvmerge-subs" -v "$path":/source -w /source -it moul/mkvtoolnix mkvmerge -o /source/"$tmpfile" "$mkvfile" "$srtfile"
+uid="$(id -u $USER)"
+docker run --name "mkvmerge-subs" -v "$path":/source -w /source -it moul/mkvtoolnix mkvmerge -o /source/"$tmpfile" "$mkvfile" "$srtfile" && chown "$uid" /source/"$tmpfile"
 docker rm "mkvmerge-subs"
 
 # Remove the original mkvfile and replace it with the merged file
