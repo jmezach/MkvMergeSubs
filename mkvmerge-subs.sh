@@ -5,7 +5,7 @@ die () {
 }
 
 # Validate arguments
-[ "$#" -eq 1 ] || die "Usage: $0 <path-to-srt>"
+[ "$#" -ge 1 ] || die "Usage: $0 <path-to-srt>"
 [ -e "$1" ] || die "File $1 does not exist."
 
 # Find the associated MKV file and make sure it exists
