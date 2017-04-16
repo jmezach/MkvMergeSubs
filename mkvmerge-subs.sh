@@ -25,6 +25,12 @@ gid="$(id -g $USER)"
 docker run --name "mkvmerge-subs" -v "$path":/source -w /source -it moul/mkvtoolnix /bin/bash -c "mkvmerge -o /source/'$tmpfile' '$mkvfile' '$srtfile'; chown '$uid'.'$gid' /source/'$tmpfile'"
 docker rm "mkvmerge-subs"
 
-# Remove the original mkvfile and replace it with the merged file
-rm "$path/$mkvfile"
-mv "$path/$tmpfile" "$path/$mkvfile"
+# Make sure that the merged file exists
+if [ -e "$path/$tmpfile" ]; then
+    # Remove the original mkvfile and replace it with the merged file
+    rm "$path/$mkvfile"
+    mv "$path/$tmpfile" "$path/$mkvfile"
+    echo "Succesfully merged subtitles from $srtfile into $mkvfile"
+else
+    echo "Merging subtitles from $srtfile into $mkvfile failed!"
+fi
